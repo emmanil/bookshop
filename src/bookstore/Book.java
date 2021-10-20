@@ -7,6 +7,7 @@ public class Book {
     //Array med object Book i sin collection. 
     ArrayList<Book> theBookshop = new ArrayList<>();
 
+    //kommande problem finns bara 8 platser i denna??
     //ArrayList med object Book i sin collection.
     ArrayList<Book> theCustomersOrder = new ArrayList<>();
 

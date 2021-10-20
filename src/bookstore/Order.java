@@ -57,8 +57,7 @@ public class Order extends Book {
             totalNrPages = totalNrPages + theCustomersOrder.get(i).nrOfPages;
         }
         totalWeight = totalNrPages / 500; //weight in kilos 
-        //PROBLEM  % .2d  don't work
-        System.out.println("The total weight is " + totalWeight + " kilo.");
+        System.out.println("The total weight is " + String.format("%.2f", totalWeight) + " kilo.");
     }
 
     public void totalPrice() {
@@ -66,7 +65,7 @@ public class Order extends Book {
         for (int i = 0; i < theCustomersOrder.size(); i++) {
             totalPriceOfBooks = totalPriceOfBooks + theCustomersOrder.get(i).bookprice;
         }
-        System.out.print("The total price is " + (totalPriceOfBooks + this.shippingFee));
+        System.out.print("The total price is " + String.format("%.2f", (totalPriceOfBooks + this.shippingFee)));
     }
 
     public String getInvoiceName(String anything) {
@@ -80,13 +79,14 @@ public class Order extends Book {
                 + "at Bookstore.");
         sb.append("\nYour ordernumber is " + orderNr + ". \nYour purchase: \n");
         for (int i = 0; i < theCustomersOrder.size(); i++) {
-            sb.append(theBookshop.get(i).author + ", ");
-            sb.append(theBookshop.get(i).bookname + ", ");
-            sb.append(theBookshop.get(i).bookprice + "£, ");
-            sb.append(theBookshop.get(i).nrOfPages + " pages. \n");
+            sb.append(theCustomersOrder.get(i).author + ", ");
+            sb.append(theCustomersOrder.get(i).bookname + ", ");
+            sb.append(theCustomersOrder.get(i).bookprice + "£, ");
+            sb.append(theCustomersOrder.get(i).nrOfPages + " pages. \n");
+            System.out.println(theCustomersOrder.size() + " test kladd createInvoice() i = " + i);
         }
-        sb.append("The total weight is " + totalWeight % .2f + " kilo.");
-        sb.append("\nThe total price is " + (totalPriceOfBooks + this.shippingFee) + " kronor. ");
+        sb.append("The total weight is " + String.format("%.2f", totalWeight) + " kilo.");
+        sb.append("\nThe total price is " + String.format("%.2f", (totalPriceOfBooks + this.shippingFee)) + " kronor. ");
         String invoice = sb.toString();
         return invoice;
     }

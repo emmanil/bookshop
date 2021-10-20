@@ -63,6 +63,7 @@ public class Main {
                 if (choice == 1) {
                     System.out.println("\nThank you for shopping at Bookstore.\nYour invoice:");
                     shopping.MessageDelivery();
+                    
                     out.print(shopping.createInvoice("have your books delivered"));
                     out.close();
                 } else {
