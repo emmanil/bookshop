@@ -42,10 +42,10 @@ public class Main {
 
         System.out.println("Enter 1 if you want to collect your books, "
                 + "\nenter 2 if you want them delivered. ");
-        choice = scan.nextInt();
+        choice = scan.nextInt();  
 
         //create a new file, new file has the same name as the ordernr.
-        PrintStream out = new PrintStream(new FileOutputStream(shopping.getInvoiceName("whateverText")));
+        PrintStream out = new PrintStream(new FileOutputStream(shopping.getInvoiceName("gettingNameFromMethod")));
 
         switch (choice) {
             case 1:
@@ -80,6 +80,7 @@ public class Main {
                     }
                 }
         }
-
+        
+        
     }
 }
