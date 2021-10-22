@@ -15,6 +15,9 @@ public class Book {
     String author;
     int nrOfPages;
     double bookprice;
+    
+    //användarens val är nedan.
+    int num;
 
 
     Book(String author, String bookname, int pages, double price) {
@@ -51,8 +54,8 @@ public void createBookshopBooks(){
         for (int i = 0; i < theBookshop.size(); i++) {
             j = i + 1; //index displayed for customer starts at 1.   
             System.out.print("Nr " + j + ". " + theBookshop.get(i).author + ", "
-                    + theBookshop.get(i).bookname + ", " + theBookshop.get(i).bookprice + " kronor, "
-                    + theBookshop.get(i).nrOfPages + " pages. \n");
+                    + theBookshop.get(i).bookname + ", " + theBookshop.get(i).bookprice 
+                    + " kronor, " + theBookshop.get(i).nrOfPages + " pages. \n");
         }
     }
 

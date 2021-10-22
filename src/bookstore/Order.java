@@ -7,6 +7,7 @@ public class Order extends Book {
     double totalWeight = 0;
     String orderNr = "01";
 
+    //kanske kasta nedan, om den ändå inte används.
     public Order(String author, String bookname, int pages, double price) {
         super(author, bookname, pages, price);
     }
@@ -44,8 +45,8 @@ public class Order extends Book {
         for (int i = 0; i < theCustomersOrder.size(); i++) {
             int j = i + 1; //index displayed for customer starts at 1.   
             System.out.print("Nr " + j + ". " + theCustomersOrder.get(i).author + ", "
-                    + theCustomersOrder.get(i).bookname + ", " + theCustomersOrder.get(i).bookprice + " £, "
-                    + theCustomersOrder.get(i).nrOfPages + " pages. \n");
+                    + theCustomersOrder.get(i).bookname + ", " + theCustomersOrder.get(i).bookprice + 
+                    " kronor, " + theCustomersOrder.get(i).nrOfPages + " pages. \n");
         }
         /* the total weight and an order number. 
         A message is then displayed  showing a summary of the order and the order number.*/

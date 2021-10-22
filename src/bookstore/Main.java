@@ -17,7 +17,7 @@ public class Main {
         System.out.println("Welcome to Bookstore. \nThese are the books that are on sale");
 
         boolean buyBooks = true;
-        while (buyBooks = true) {
+        while (buyBooks == true) {
             shopping.displayBookshopBooks();
 
             System.out.println("Press the nr of the book you want to buy: ");
@@ -29,7 +29,6 @@ public class Main {
 
             if (choice == 2) {
                 buyBooks = !true;
-                break;
             }
         }
 
@@ -42,7 +41,7 @@ public class Main {
 
         System.out.println("Enter 1 if you want to collect your books, "
                 + "\nenter 2 if you want them delivered. ");
-        choice = scan.nextInt();  
+        choice = scan.nextInt();
 
         //create a new file, new file has the same name as the ordernr.
         PrintStream out = new PrintStream(new FileOutputStream(shopping.getInvoiceName("gettingNameFromMethod")));
@@ -63,7 +62,7 @@ public class Main {
                 if (choice == 1) {
                     System.out.println("\nThank you for shopping at Bookstore.\nYour invoice:");
                     shopping.MessageDelivery();
-                    
+
                     out.print(shopping.createInvoice("have your books delivered"));
                     out.close();
                 } else {
@@ -81,7 +80,6 @@ public class Main {
                     }
                 }
         }
-        
-        
+
     }
 }
