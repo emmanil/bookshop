@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public class Order extends Book {
 
-    public static int num = 0;
+    public static int choice = 0;
 
     double shippingFee = 0;
     double totalPriceOfBooks = 0;
@@ -106,10 +106,11 @@ public class Order extends Book {
         }
     }
 
-    public void addThatBook(int choice) {
+    public void addThatBook() {
         //in menue for customer books start at index 1, but irl it's index 0. Hence -1.   
-        //Collections.copy(theCustomersOrder, theBookshop.subList(choice, choice));
-        theCustomersOrder.add(theBookshop.get(choice));
+       
+        theCustomersOrder.add(theBookshop.get(choice-1));
+
         //kolla alla object som finns i kundens order och om några är samma adda de.  
         //ATT GÖRA 
     }
@@ -124,15 +125,15 @@ public class Order extends Book {
             Scanner scan = new Scanner(System.in);
 
             if (scan.hasNextInt()) {
-                num = scan.nextInt();
-                //användaren får se +1 på index, vilket inte stämmer med böckernas eg placering.
-                num = num - 1;
+                choice = scan.nextInt();
 
                 for (int i = 0; i < lengthIO; i++) {
                     int IOi = Integer.valueOf(theIndividualOptions[i]);
-                    if (num == IOi) {
-                        //if inuti for loop.num motsvarar något av theIndividualOptions.
-                        updateNum(num);
+                    if (choice == IOi) {
+                        //if inuti for loop.num motsvarar något av theIndividualOptions men... 
+                        //användaren får se +1 på index, vilket inte stämmer med böckernas eg placering.
+                       // num = num-1;
+                        updateChoice(choice);
                         intIsOk = true;
                     }
                 }
@@ -147,8 +148,7 @@ public class Order extends Book {
         }
     }
 
-    public static int updateNum(int val) {
-        num = val;
-        return num;
-    }
+    public static int updateChoice(int val) {
+      return choice;
+   }
 }
