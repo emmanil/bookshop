@@ -1,6 +1,11 @@
 package bookstore;
 
+import java.util.ArrayList;
+import java.util.Scanner;
+
 public class Order extends Book {
+
+    public static int num = 0;
 
     double shippingFee = 0;
     double totalPriceOfBooks = 0;
@@ -45,8 +50,8 @@ public class Order extends Book {
         for (int i = 0; i < theCustomersOrder.size(); i++) {
             int j = i + 1; //index displayed for customer starts at 1.   
             System.out.print("Nr " + j + ". " + theCustomersOrder.get(i).author + ", "
-                    + theCustomersOrder.get(i).bookname + ", " + theCustomersOrder.get(i).bookprice + 
-                    " kronor, " + theCustomersOrder.get(i).nrOfPages + " pages. \n");
+                    + theCustomersOrder.get(i).bookname + ", " + theCustomersOrder.get(i).bookprice
+                    + " kronor, " + theCustomersOrder.get(i).nrOfPages + " pages. \n");
         }
         /* the total weight and an order number. 
         A message is then displayed  showing a summary of the order and the order number.*/
@@ -82,9 +87,8 @@ public class Order extends Book {
         for (int i = 0; i < theCustomersOrder.size(); i++) {
             sb.append(theCustomersOrder.get(i).author + ", ");
             sb.append(theCustomersOrder.get(i).bookname + ", ");
-            sb.append(theCustomersOrder.get(i).bookprice + "£, ");
+            sb.append(theCustomersOrder.get(i).bookprice + " kronor, ");
             sb.append(theCustomersOrder.get(i).nrOfPages + " pages. \n");
-            System.out.println(theCustomersOrder.size() + " test kladd createInvoice() i = " + i);
         }
         sb.append("The total weight is " + String.format("%.2f", totalWeight) + " kilo.");
         sb.append("\nThe total price is " + String.format("%.2f", (totalPriceOfBooks + this.shippingFee)) + " kronor. ");
@@ -105,6 +109,46 @@ public class Order extends Book {
     public void addThatBook(int choice) {
         //in menue for customer books start at index 1, but irl it's index 0. Hence -1.   
         //Collections.copy(theCustomersOrder, theBookshop.subList(choice, choice));
-        theCustomersOrder.add(theBookshop.get(choice - 1));
+        theCustomersOrder.add(theBookshop.get(choice));
+        //kolla alla object som finns i kundens order och om några är samma adda de.  
+        //ATT GÖRA 
+    }
+
+    public static void askQuestioncheckInputIsCorrect(String theQuestion, String theRealOptions) {
+        String[] theIndividualOptions = theRealOptions.split(",");
+        int lengthIO = theIndividualOptions.length;
+
+        boolean intIsOk = !true;
+        while (intIsOk == !true) {
+            System.out.println(theQuestion);
+            Scanner scan = new Scanner(System.in);
+
+            if (scan.hasNextInt()) {
+                num = scan.nextInt();
+                //användaren får se +1 på index, vilket inte stämmer med böckernas eg placering.
+                num = num - 1;
+
+                for (int i = 0; i < lengthIO; i++) {
+                    int IOi = Integer.valueOf(theIndividualOptions[i]);
+                    if (num == IOi) {
+                        //if inuti for loop.num motsvarar något av theIndividualOptions.
+                        updateNum(num);
+                        intIsOk = true;
+                    }
+                }
+                if (intIsOk == !true) {
+                    //input var fel int.
+                    System.out.println("Your input was wrong. ");
+                }
+            } else {
+                //input är inte en int.
+                System.out.println("Your input was wrong. ");
+            }
+        }
+    }
+
+    public static int updateNum(int val) {
+        num = val;
+        return num;
     }
 }
