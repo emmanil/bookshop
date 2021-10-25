@@ -1,20 +1,135 @@
 package bookstore;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Order extends Book {
 
-    public static int choice = 0;
-
+    //en medlemsvariabe är inte OP: (int choice = 0;) tas bort.
     double shippingFee = 0;
     double totalPriceOfBooks = 0;
     double totalWeight = 0;
     String orderNr = "01";
 
+    int quantity;    //int quantity är ny 23/10.
+
+    //ArrayList med object Order i sin collection.
+    ArrayList<Book> theCustomersOrder = new ArrayList<>();
+
     //kanske kasta nedan, om den ändå inte används.
-    public Order(String author, String bookname, int pages, double price) {
+    public Order(String author, String bookname, int pages, double price, int quantity) {
         super(author, bookname, pages, price);
+        this.quantity = 1;
+    }
+
+    public void askQuestionCheckInput(String theQuestion, String theRealOptions, String whatsGoingOn) {
+        String[] theIndividualOptions = theRealOptions.split(",");
+        int lengthIO = theIndividualOptions.length;
+
+        boolean intIsOk = !true;
+        while (intIsOk == !true) {
+            System.out.println(theQuestion);
+            Scanner scan = new Scanner(System.in);
+
+            if (scan.hasNextInt()) {
+                int choice = scan.nextInt();
+
+                for (int i = 0; i < lengthIO; i++) {
+                    int IOi = Integer.valueOf(theIndividualOptions[i]);
+                    if (choice == IOi) {
+                        if (whatsGoingOn.equals("buyBook")) {
+                            //användaren får se +1 på index, vilket inte stämmer med böckernas eg placering.
+                            addThatBook(choice - 1);
+                        } else if (whatsGoingOn.equals("continueBuyingOrNot")) {
+                            if (choice == 1) {
+                                continueBuyingBooks();
+                                // fortsätta köpa böcker
+                            } else if (choice == 2) {
+                                //sluta köpa böcker
+                            }
+                        }
+                        intIsOk = true;
+                    }
+                }
+                if (intIsOk == !true) {
+                    //input var fel int.
+                    System.out.println("Your input was wrong. ");
+                }
+            } else {
+                //input är inte en int.
+                System.out.println("Your input was wrong. ");
+            }
+        }
+    }
+
+    public void addThatBook(int val) {
+        theCustomersOrder.add(theBookshop.get(val));
+
+        //skapa nytt object från book och lägga till quantity + antal 
+        //obs antal som hela tiden stämms av
+        //kolla alla object som finns i kundens order och om några är samma adda de.  
+        //ATT GÖRA 
+        askQuestionCheckInput("Press 1 if you want to continue "
+                + "buying books \nPress 2 to go to cash out. ", "1,2", "continueBuyingOrNot");
+    }
+
+    public void continueBuyingBooks() {
+        displayBookshopBooks();
+        askQuestionCheckInput("Press the nr of the book you want "
+                + "to buy: ", "1,2,3,4,5,6,7,8", "buyBook");
+        // buyBooks = true;
+        //fortsätta köpa böcker
+
+    }
+
+    public void deliveryOrCollectAndInvoice() throws FileNotFoundException {
+        Scanner scan = new Scanner(System.in);
+     
+        PrintStream out = new PrintStream(new FileOutputStream(this.orderNr + ".txt"));
+        
+        boolean keepGoing = true;
+        while (keepGoing == true){
+        System.out.println("Enter 1 if you want to collect your books, "
+                + "\nEnter 2 if you want them delivered.");
+        int choice = 0; //om detta inte funkar lägga switch i if-satsen där choice scannas...
+        if (scan.hasNextInt()){
+            choice = scan.nextInt();    
+        }
+        
+        //using switch to show switch handles errors in int-input (default).
+        switch (choice) {
+            case 1:
+                MessageCollect();
+                out.print(createInvoice("collect your books"));
+                out.close();
+                keepGoing = !true;
+                break;
+            case 2:
+                MessageDelivery();
+                System.out.println("To confirm your purchase press 1.\nIf you want "
+                        + "to cancel your order press 2.");
+                choice = scan.nextInt();
+                
+                if (choice == 1) {
+                    System.out.println("\nThank you for shopping at Bookstore.\nYour invoice:");
+                    MessageDelivery();
+                    out.print(createInvoice("have your books delivered"));
+                    out.close();
+                    keepGoing = !true;
+                } else {
+                    //choice 2
+                    System.out.println("Your order is cancelled.");
+                    break;
+                }
+            default:
+                System.out.println("Your input was wrong. ");
+                System.out.print ("          kladd test - default I switch.. - break;");
+                break;
+            }
+        }
     }
 
     public void MessageCollect() {
@@ -74,10 +189,6 @@ public class Order extends Book {
         System.out.print("The total price is " + String.format("%.2f", (totalPriceOfBooks + this.shippingFee)));
     }
 
-    public String getInvoiceName(String anything) {
-        return orderNr + ".txt";
-    }
-
     public String createInvoice(String howBooksAredelivered) {
 
         StringBuilder sb = new StringBuilder();
@@ -106,49 +217,4 @@ public class Order extends Book {
         }
     }
 
-    public void addThatBook() {
-        //in menue for customer books start at index 1, but irl it's index 0. Hence -1.   
-       
-        theCustomersOrder.add(theBookshop.get(choice-1));
-
-        //kolla alla object som finns i kundens order och om några är samma adda de.  
-        //ATT GÖRA 
-    }
-
-    public static void askQuestioncheckInputIsCorrect(String theQuestion, String theRealOptions) {
-        String[] theIndividualOptions = theRealOptions.split(",");
-        int lengthIO = theIndividualOptions.length;
-
-        boolean intIsOk = !true;
-        while (intIsOk == !true) {
-            System.out.println(theQuestion);
-            Scanner scan = new Scanner(System.in);
-
-            if (scan.hasNextInt()) {
-                choice = scan.nextInt();
-
-                for (int i = 0; i < lengthIO; i++) {
-                    int IOi = Integer.valueOf(theIndividualOptions[i]);
-                    if (choice == IOi) {
-                        //if inuti for loop.num motsvarar något av theIndividualOptions men... 
-                        //användaren får se +1 på index, vilket inte stämmer med böckernas eg placering.
-                       // num = num-1;
-                        updateChoice(choice);
-                        intIsOk = true;
-                    }
-                }
-                if (intIsOk == !true) {
-                    //input var fel int.
-                    System.out.println("Your input was wrong. ");
-                }
-            } else {
-                //input är inte en int.
-                System.out.println("Your input was wrong. ");
-            }
-        }
-    }
-
-    public static int updateChoice(int val) {
-      return choice;
-   }
 }
