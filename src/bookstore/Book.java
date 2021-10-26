@@ -22,14 +22,14 @@ public class Book {
     public void createBookshopBooks() {
         //ArrayList med object Book i sin collection.
 
-        Book HP1 = new Book("Harry Potter and the Philosopher's stone", "JK Rowling", 309, 151.99);
-        Book HP2 = new Book("Harry Potter and the Chamber of secrets", "JK Rowling", 341, 152.99);
-        Book HP3 = new Book("Harry Potter and the Prisoner of Azkaban", "JK Rowling", 448, 153.99);
-        Book HP4 = new Book("Harry Potter and the Goblet of Fire", "JK Rowling", 752, 154.99);
-        Book HP5 = new Book("Harry Potter and the Order of the Phoenix", "JK Rowling", 896, 155.99);
-        Book HP6 = new Book("Harry Potter and the Half-Blood Prince", "JK Rowling", 652, 156.99);
-        Book HP7 = new Book("Harry Potter and the Deathly Hallows", "JK Rowling", 784, 157.99);
-        Book HP8 = new Book("Harry Potter and the Cursed Child", "JK Rowling", 336, 158.99);
+        Book HP1 = new Book("JK Rowling", "Harry Potter and the Philosopher's stone", 309, 151.99);
+        Book HP2 = new Book("JK Rowling", "Harry Potter and the Chamber of secrets", 341, 152.99);
+        Book HP3 = new Book("JK Rowling", "Harry Potter and the Prisoner of Azkaban", 448, 153.99);
+        Book HP4 = new Book("JK Rowling", "Harry Potter and the Goblet of Fire", 752, 154.99);
+        Book HP5 = new Book("JK Rowling", "Harry Potter and the Order of the Phoenix", 896, 155.99);
+        Book HP6 = new Book("JK Rowling", "Harry Potter and the Half-Blood Prince", 652, 156.99);
+        Book HP7 = new Book("JK Rowling", "Harry Potter and the Deathly Hallows", 784, 157.99);
+        Book HP8 = new Book("JK Rowling", "Harry Potter and the Cursed Child", 336, 158.99);
 
         theBookshop.add(HP1);
         theBookshop.add(HP2);

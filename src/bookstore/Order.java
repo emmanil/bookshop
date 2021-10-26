@@ -17,12 +17,12 @@ public class Order extends Book {
     int quantity;    //int quantity är ny 23/10.
 
     //ArrayList med object Order i sin collection.
-    ArrayList<Book> theCustomersOrder = new ArrayList<>();
+    ArrayList<Order> theCustomersOrder = new ArrayList<>();
 
     //kanske kasta nedan, om den ändå inte används.
     public Order(String author, String bookname, int pages, double price, int quantity) {
         super(author, bookname, pages, price);
-        this.quantity = 1;
+        this.quantity = quantity;
     }
 
     public void askQuestionCheckInput(String theQuestion, String theRealOptions, String whatsGoingOn) {
@@ -36,13 +36,25 @@ public class Order extends Book {
 
             if (scan.hasNextInt()) {
                 int choice = scan.nextInt();
+                int howManyCopies = 0;
 
                 for (int i = 0; i < lengthIO; i++) {
                     int IOi = Integer.valueOf(theIndividualOptions[i]);
+
                     if (choice == IOi) {
                         if (whatsGoingOn.equals("buyBook")) {
-                            //användaren får se +1 på index, vilket inte stämmer med böckernas eg placering.
-                            addThatBook(choice - 1);
+                            while (howManyCopies == 0) { //denna loopen är tillagd kl 12.50.
+                                System.out.println("How many copies would you like of "
+                                        + theBookshop.get(choice - 1).bookname + "?");
+                                if (scan.hasNextInt()) {
+                                    howManyCopies = scan.nextInt();
+                                } else {
+                                    System.out.println("Wrong input. ");
+                                }
+                            }
+
+                            //användaren får se +1 på choice-index, vilket inte stämmer med böckernas eg placering.
+                            addThatBook(choice - 1, howManyCopies);
                         } else if (whatsGoingOn.equals("continueBuyingOrNot")) {
                             if (choice == 1) {
                                 continueBuyingBooks();
@@ -65,15 +77,28 @@ public class Order extends Book {
         }
     }
 
-    public void addThatBook(int val) {
-        theCustomersOrder.add(theBookshop.get(val));
+    public void addThatBook(int val, int howMany) {
 
-        //skapa nytt object från book och lägga till quantity + antal 
-        //obs antal som hela tiden stämms av
-        //kolla alla object som finns i kundens order och om några är samma adda de.  
-        //ATT GÖRA 
+        //det nya objectet skapas
+        Order newOrderObject = new Order(theBookshop.get(val).author,
+                theBookshop.get(val).bookname,
+                theBookshop.get(val).nrOfPages,
+                theBookshop.get(val).bookprice,
+                howMany);
+
+        boolean bookIsNewToOrder = true;
+        for (int i = 0; i < theCustomersOrder.size(); i++) {
+            if (newOrderObject.bookname.equals(theCustomersOrder.get(i).bookname)) {
+                theCustomersOrder.get(i).quantity = theCustomersOrder.get(i).quantity + howMany;
+                bookIsNewToOrder = !true;
+            }
+        }
+        if (bookIsNewToOrder == true) {
+            theCustomersOrder.add(newOrderObject);
+        }
+
         askQuestionCheckInput("Press 1 if you want to continue "
-                + "buying books \nPress 2 to go to cash out. ", "1,2", "continueBuyingOrNot");
+                + "buying books \nPress 2 to go to the checkout. ", "1,2", "continueBuyingOrNot");
     }
 
     public void continueBuyingBooks() {
@@ -105,38 +130,38 @@ public class Order extends Book {
                     System.out.println("To confirm your purchase press 1.\nIf you want "
                             + "to cancel your order press 2.");
                     choice = scan.nextLine();
-                    
-                    boolean goOn = true;
-                    while (goOn == true){
-                    switch (choice) {
-                        case "1":
-                            System.out.println("\nThank you for shopping at Bookstore.\nYour invoice:");
-                            MessageDelivery();
-                            out.print(createInvoice("have your books delivered"));
-                            out.close();
-                            goOn = !true;
-                            keepGoing = !true;
-                            break;
 
-                        case "2":
-                            System.out.println("Your order is cancelled.");
-                            goOn = !true;
-                            keepGoing = !true;
-                            break;
-        
+                    boolean goOn = true;
+                    while (goOn == true) {
+                        switch (choice) {
+                            case "1":
+                                System.out.println("\nThank you for shopping at Bookstore.\nYour invoice:");
+                                MessageDelivery();
+                                out.print(createInvoice("have your books delivered"));
+                                out.close();
+                                goOn = !true;
+                                keepGoing = !true;
+                                break;
+
+                            case "2":
+                                System.out.println("Your order is cancelled.");
+                                goOn = !true;
+                                keepGoing = !true;
+                                break;
+
                             default:
-                            System.out.println("Your input was wrong. ");
-                            System.out.println("To confirm your purchase press 1.\nIf you want "
-                            + "to cancel your order press 2.");
-                            choice = scan.nextLine();
-                            break;
+                                System.out.println("Your input was wrong. ");
+                                System.out.println("To confirm your purchase press 1.\nIf you want "
+                                        + "to cancel your order press 2.");
+                                choice = scan.nextLine();
+                                break;
                         }
                     }
 
-                    default:
-                    if (keepGoing == true)  {
-                    System.out.println("Your input was wrong. ");
-                    break;
+                default:
+                    if (keepGoing == true) {
+                        System.out.println("Your input was wrong. ");
+                        break;
                     }
             }
         }
@@ -172,7 +197,13 @@ public class Order extends Book {
     public void displayCustomersOrder() {
         for (int i = 0; i < theCustomersOrder.size(); i++) {
             int j = i + 1; //index displayed for customer starts at 1.   
-            System.out.print("Nr " + j + ". " + theCustomersOrder.get(i).author + ", "
+            System.out.print(j + ". ");
+
+            if ((theCustomersOrder.get(i).quantity) >= 2) {
+                System.out.print(theCustomersOrder.get(i).quantity + " copys of ");
+            }
+
+            System.out.print(theCustomersOrder.get(i).author + ", "
                     + theCustomersOrder.get(i).bookname + ", " + theCustomersOrder.get(i).bookprice
                     + " kronor, " + theCustomersOrder.get(i).nrOfPages + " pages. \n");
         }
@@ -181,18 +212,22 @@ public class Order extends Book {
     public void getWeightOfOrder() {
         double totalNrPages = 0;
         for (int i = 0; i < theCustomersOrder.size(); i++) {
-            totalNrPages = totalNrPages + theCustomersOrder.get(i).nrOfPages;
+
+            totalNrPages = totalNrPages + (theCustomersOrder.get(i).nrOfPages
+                    * theCustomersOrder.get(i).quantity);
         }
-        totalWeight = totalNrPages / 500; //weight in kilos 
-        System.out.println("The total weight is " + String.format("%.2f", totalWeight) + " kilo.");
+        this.totalWeight = totalNrPages / 500; //weight in kilos 
+        System.out.println("The total weight is " + String.format("%.2f", this.totalWeight) + " kilo.");
     }
 
     public void totalPrice() {
-        totalPriceOfBooks = 0;
+        this.totalPriceOfBooks = 0;
         for (int i = 0; i < theCustomersOrder.size(); i++) {
-            totalPriceOfBooks = totalPriceOfBooks + theCustomersOrder.get(i).bookprice;
+            this.totalPriceOfBooks = this.totalPriceOfBooks + (theCustomersOrder.get(i).bookprice
+                    * theCustomersOrder.get(i).quantity);
+
         }
-        System.out.print("The total price is " + String.format("%.2f", (totalPriceOfBooks + this.shippingFee)));
+        System.out.print("The total price is " + String.format("%.2f", (this.totalPriceOfBooks + this.shippingFee)));
     }
 
     public String createInvoice(String howBooksAredelivered) {
@@ -200,21 +235,37 @@ public class Order extends Book {
         StringBuilder sb = new StringBuilder();
         sb.append("You have choosen to " + howBooksAredelivered + ". Thank you for shopping "
                 + "at Bookstore.");
-        sb.append("\nYour ordernumber is " + orderNr + ". \nYour purchase: \n");
+        sb.append("\nYour ordernumber is " + this.orderNr + ". \nYour purchase: \n");
         for (int i = 0; i < theCustomersOrder.size(); i++) {
+            sb.append((i+1) + ". ");
+            if ((theCustomersOrder.get(i).quantity) >= 2) {
+                sb.append(theCustomersOrder.get(i).quantity + " copys of ");
+            }
             sb.append(theCustomersOrder.get(i).author + ", ");
             sb.append(theCustomersOrder.get(i).bookname + ", ");
             sb.append(theCustomersOrder.get(i).bookprice + " kronor, ");
             sb.append(theCustomersOrder.get(i).nrOfPages + " pages. \n");
         }
-        sb.append("The total weight is " + String.format("%.2f", totalWeight) + " kilo.");
-        sb.append("\nThe total price is " + String.format("%.2f", (totalPriceOfBooks + this.shippingFee)) + " kronor. ");
+        sb.append("The total weight is " + String.format("%.2f", this.totalWeight) + " kilo.");
+        sb.append("\nThe total price is " + String.format("%.2f", (totalPriceOfBooks + this.shippingFee)) + " kronor");
+        
+        if (this.shippingFee > 0){
+            sb.append(" including shippingfee.");
+        }else{
+            sb.append(".");
+        }
+        
         String invoice = sb.toString();
         return invoice;
     }
 
     public void getshippingFee() {
-        int nrOfBoxesNeeded = (int) (theCustomersOrder.size() / 5 + 0.9);
+        int books = 0;
+        for (int i = 0; i < theCustomersOrder.size(); i++) {
+            books = books + theCustomersOrder.get(i).quantity;
+        }
+
+        int nrOfBoxesNeeded = (int) (books / 5.0 + 0.9);
 
         if (nrOfBoxesNeeded < 5) {
             this.shippingFee = nrOfBoxesNeeded * 150;

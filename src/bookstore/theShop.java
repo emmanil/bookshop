@@ -1,7 +1,6 @@
 package bookstore;
 
 import java.io.FileNotFoundException;
-import java.util.Scanner;
 
 public class theShop {
 
@@ -19,7 +18,7 @@ public class theShop {
         shopping.askQuestionCheckInput("Press the nr of the book you want "
                 + "to buy: ", "1,2,3,4,5,6,7,8", "buyBook");
 
-        System.out.println("\nYour order: ");
+        System.out.println("Your order: ");
         shopping.getOrderNr();
         shopping.displayCustomersOrder();
         shopping.getWeightOfOrder();
