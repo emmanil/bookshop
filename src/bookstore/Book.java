@@ -7,18 +7,10 @@ public class Book {
     //Array med object Book i sin collection. 
     ArrayList<Book> theBookshop = new ArrayList<>();
 
-    //kommande problem finns bara 8 platser i denna??
-    //ArrayList med object Book i sin collection.
-    ArrayList<Book> theCustomersOrder = new ArrayList<>();
-
     String bookname;
     String author;
     int nrOfPages;
     double bookprice;
-    
-    //användarens val är nedan.
-    int num;
-
 
     Book(String author, String bookname, int pages, double price) {
         this.author = author;
@@ -27,8 +19,8 @@ public class Book {
         this.bookprice = price;
     }
 
-public void createBookshopBooks(){
-    //ArrayList med object Book i sin collection.
+    public void createBookshopBooks() {
+        //ArrayList med object Book i sin collection.
 
         Book HP1 = new Book("Harry Potter and the Philosopher's stone", "JK Rowling", 309, 151.99);
         Book HP2 = new Book("Harry Potter and the Chamber of secrets", "JK Rowling", 341, 152.99);
@@ -46,18 +38,17 @@ public void createBookshopBooks(){
         theBookshop.add(HP5);
         theBookshop.add(HP6);
         theBookshop.add(HP7);
-        theBookshop.add(HP8);   
-}
-    
+        theBookshop.add(HP8);
+    }
+
     public void displayBookshopBooks() {
         int j;
         for (int i = 0; i < theBookshop.size(); i++) {
             j = i + 1; //index displayed for customer starts at 1.   
             System.out.print("Nr " + j + ". " + theBookshop.get(i).author + ", "
-                    + theBookshop.get(i).bookname + ", " + theBookshop.get(i).bookprice 
+                    + theBookshop.get(i).bookname + ", " + theBookshop.get(i).bookprice
                     + " kronor, " + theBookshop.get(i).nrOfPages + " pages. \n");
         }
     }
 
-    
 }

@@ -82,63 +82,71 @@ public class Order extends Book {
                 + "to buy: ", "1,2,3,4,5,6,7,8", "buyBook");
         // buyBooks = true;
         //fortsätta köpa böcker
-
     }
 
     public void deliveryOrCollectAndInvoice() throws FileNotFoundException {
         Scanner scan = new Scanner(System.in);
-     
         PrintStream out = new PrintStream(new FileOutputStream(this.orderNr + ".txt"));
-        
         boolean keepGoing = true;
-        while (keepGoing == true){
-        System.out.println("Enter 1 if you want to collect your books, "
-                + "\nEnter 2 if you want them delivered.");
-        int choice = 0; //om detta inte funkar lägga switch i if-satsen där choice scannas...
-        if (scan.hasNextInt()){
-            choice = scan.nextInt();    
-        }
-        
-        //using switch to show switch handles errors in int-input (default).
-        switch (choice) {
-            case 1:
-                MessageCollect();
-                out.print(createInvoice("collect your books"));
-                out.close();
-                keepGoing = !true;
-                break;
-            case 2:
-                MessageDelivery();
-                System.out.println("To confirm your purchase press 1.\nIf you want "
-                        + "to cancel your order press 2.");
-                choice = scan.nextInt();
-                
-                if (choice == 1) {
-                    System.out.println("\nThank you for shopping at Bookstore.\nYour invoice:");
-                    MessageDelivery();
-                    out.print(createInvoice("have your books delivered"));
+
+        while (keepGoing == true) {
+            System.out.println("Enter 1 if you want to collect your books, "
+                    + "\nEnter 2 if you want them delivered.");
+            String choice = scan.nextLine();
+            switch (choice) {
+                case "1":
+                    MessageCollect();
+                    out.print(createInvoice("collect your books"));
                     out.close();
                     keepGoing = !true;
-                } else {
-                    //choice 2
-                    System.out.println("Your order is cancelled.");
                     break;
-                }
-            default:
-                System.out.println("Your input was wrong. ");
-                System.out.print ("          kladd test - default I switch.. - break;");
-                break;
+                case "2":
+                    MessageDelivery();
+                    System.out.println("To confirm your purchase press 1.\nIf you want "
+                            + "to cancel your order press 2.");
+                    choice = scan.nextLine();
+                    
+                    boolean goOn = true;
+                    while (goOn == true){
+                    switch (choice) {
+                        case "1":
+                            System.out.println("\nThank you for shopping at Bookstore.\nYour invoice:");
+                            MessageDelivery();
+                            out.print(createInvoice("have your books delivered"));
+                            out.close();
+                            goOn = !true;
+                            keepGoing = !true;
+                            break;
+
+                        case "2":
+                            System.out.println("Your order is cancelled.");
+                            goOn = !true;
+                            keepGoing = !true;
+                            break;
+        
+                            default:
+                            System.out.println("Your input was wrong. ");
+                            System.out.println("To confirm your purchase press 1.\nIf you want "
+                            + "to cancel your order press 2.");
+                            choice = scan.nextLine();
+                            break;
+                        }
+                    }
+
+                    default:
+                    if (keepGoing == true)  {
+                    System.out.println("Your input was wrong. ");
+                    break;
+                    }
             }
         }
     }
 
     public void MessageCollect() {
-        //All the methods gets called and the variables gets correct. Output displayed in console. 
         System.out.println("\nYou have choosen to collect your books. "
                 + "Thank you for shopping at Bookstore. \nYour purchase:");
         thePurchase();
         System.out.print(" kronor.\n");
-
     }
 
     public void MessageDelivery() {
@@ -168,8 +176,6 @@ public class Order extends Book {
                     + theCustomersOrder.get(i).bookname + ", " + theCustomersOrder.get(i).bookprice
                     + " kronor, " + theCustomersOrder.get(i).nrOfPages + " pages. \n");
         }
-        /* the total weight and an order number. 
-        A message is then displayed  showing a summary of the order and the order number.*/
     }
 
     public void getWeightOfOrder() {
@@ -208,7 +214,7 @@ public class Order extends Book {
     }
 
     public void getshippingFee() {
-        int nrOfBoxesNeeded = (int) (theCustomersOrder.size() / 5 + 1.9);
+        int nrOfBoxesNeeded = (int) (theCustomersOrder.size() / 5 + 0.9);
 
         if (nrOfBoxesNeeded < 5) {
             this.shippingFee = nrOfBoxesNeeded * 150;
